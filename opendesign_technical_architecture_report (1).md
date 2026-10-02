@@ -4,13 +4,13 @@
 
 ---
 
-## 1. What Is OpenDesign & Why Is It Better?
+## 1. What Is OpenDesign & What Problem Does It Solve?
 
 Prompting a standard LLM chat window or making raw API calls (`POST /v1/chat/completions`) for frontend code quickly breaks down:
 
-- **The "AI Slop" Problem** — Models hallucinate random fonts, mismatched hex colors, and inconsistent paddings across turns.
-- **Chat Window Disconnect** — You get a raw text string dumped into chat, requiring manual copy-pasting, package management, and dependency wiring.
-- **Ambiguous Feedback Loops** — Telling a chatbot "make that card on the right slightly wider" forces it to guess, often breaking other parts of the layout.
+- **Stylistic drift** — Models introduce arbitrary fonts, mismatched hex colors, and inconsistent paddings across turns.
+- **Workflow disconnect** — Output arrives as a raw text string in a chat transcript, requiring manual copy-pasting, package management, and dependency wiring.
+- **Ambiguous feedback loops** — An instruction like "make that card on the right slightly wider" forces the model to infer the target, often breaking other parts of the layout.
 
 OpenDesign is an **agent runtime harness and live preview workspace**. Instead of asking a model for a text completion, it launches a real local coding agent (such as Claude Code or Cursor CLI) directly on your workspace files, constrains it with design tokens, and renders the result in a live browser canvas.
 
@@ -45,19 +45,19 @@ User Prompt ──▶ [OpenDesign Daemon]
 
 ---
 
-## 3. The 3 Core Building Blocks
+## 3. The Three Core Building Blocks
 
-### 3.1 The Guidance — `DESIGN.md` & `SKILL.md`
+### 3.1 Guidance Layer — `DESIGN.md` & `SKILL.md`
 
 - **`DESIGN.md` (visual contract)** — A declarative markdown contract specifying exact hex palettes, typography scales, border radii, and spacing systems (e.g., an 8px grid). It acts as guardrails so the agent doesn't guess styles.
 - **`SKILL.md` (blueprints)** — Modular procedural instructions teaching the agent how to construct specific layouts (e.g., analytics dashboards, pitch decks, mobile onboarding flows).
 
-### 3.2 The Worker — Local CLI Agent
+### 3.2 Execution Layer — Local CLI Agent
 
 - OpenDesign delegates execution to a local CLI agent on your machine (like Claude Code).
-- The agent has native filesystem access: it creates actual files, patches multi-file component trees, executes terminal commands, and autonomously self-heals syntax or build errors.
+- The agent has native filesystem access: it creates actual files, patches multi-file component trees, executes terminal commands, and resolves syntax or build errors without operator intervention.
 
-### 3.3 The Workshop — Daemon, Preview & MCP
+### 3.3 Runtime Layer — Daemon, Preview & MCP
 
 - **Express daemon** — A lightweight local service that watches project files and coordinates the runtime.
 - **Live sandbox preview** — Renders components inside an isolated `srcDoc` browser iframe.
@@ -65,13 +65,13 @@ User Prompt ──▶ [OpenDesign Daemon]
 
 ---
 
-## 4. The Killer Feature: "Click-to-Edit" Visual Grounding
+## 4. Primary Differentiator: "Click-to-Edit" Visual Grounding
 
-The platform's standout workflow improvement is connecting visual critique directly to code changes without conversational ambiguity:
+The platform's most significant workflow advantage is linking visual critique directly to code changes, removing conversational ambiguity:
 
 1. **Auto-annotation** — The preview renderer ensures structural elements contain tracking hooks (like `data-od-id`), or generates fallback DOM selectors.
 2. **Click-to-comment** — A reviewer clicks directly on any element in the browser preview (e.g., a KPI card or button) and types an instruction.
-3. **Pinpoint payload** — The preview bridge captures the exact selector and note:
+3. **Structured payload** — The preview bridge captures the exact selector and note:
 
    ```json
    {
@@ -80,7 +80,7 @@ The platform's standout workflow improvement is connecting visual critique direc
    }
    ```
 
-4. **Surgical diff** — The agent receives this grounded target, pinpoints the corresponding code on disk, and applies an isolated diff — eliminating guesswork and avoiding layout regressions.
+4. **Scoped diff** — The agent receives this grounded target, locates the corresponding code on disk, and applies an isolated diff — removing guesswork and avoiding layout regressions.
 
 ---
 
